@@ -8,17 +8,17 @@ using HarmonyLib;
 
 namespace Replace_Stuff.NewThing
 {
-	[HarmonyPatch(typeof(GenConstruct), "CanPlaceBlueprintOver")]
-	class CanPlaceBlueprintOverOldThing
+	[HarmonyPatch(typeof(GenConstruct), nameof(GenConstruct.CanReplace))]
+	class CanReplaceNewThingOverOldThing
 	{
-		//public static bool CanPlaceBlueprintOver(BuildableDef newDef, ThingDef oldDef)
-		public static void Postfix(ref bool __result, BuildableDef newDef, ThingDef oldDef)
+		// public static bool CanReplace(BuildableDef placing, BuildableDef existing, ThingDef placingStuff = null, ThingDef existingStuff = null)
+		public static void Postfix(ref bool __result, BuildableDef placing, BuildableDef existing)
 		{
 			if (__result) return;
-
+			
 			if (!DesignatorContext.designating) return;
 
-			if (newDef is ThingDef newD && newD.CanReplace(oldDef))
+			if (placing is ThingDef newD && existing is ThingDef oldD && newD.CanReplace(oldD))
 				__result = true;
 		}
 	}

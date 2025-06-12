@@ -53,7 +53,7 @@ namespace Replace_Stuff.OverMineable
 
 	//Can't do BaseBlueprintDef since NewBlueprintDef_Thing overwrites drawerType
 	[HarmonyPatch(typeof(ThingDefGenerator_Buildings), "NewBlueprintDef_Thing")]
-	public static class BlueprintOverFog
+	public static class RenderBlueprintOverFog
 	{
 		public static void Postfix(ThingDef __result)
 		{

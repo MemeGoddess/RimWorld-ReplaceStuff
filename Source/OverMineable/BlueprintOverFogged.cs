@@ -34,7 +34,7 @@ namespace Replace_Stuff.OverMineable
 		{
 			MethodInfo FoggedInfo = AccessTools.Method(typeof(GridsUtility), "Fogged", new Type[] { typeof(IntVec3), typeof(Map) });
 
-			MethodInfo BlueprintAcceptedInfo = AccessTools.Method(typeof(BlueprintOverFogged), "BlueprintExistsAcceptance");
+			MethodInfo BlueprintAcceptedInfo = AccessTools.Method(typeof(BlueprintOverFogged), nameof(BlueprintOverFogAcceptance));
 
 			bool foundFogged = false;
 			foreach (CodeInstruction i in instructions)
@@ -56,7 +56,7 @@ namespace Replace_Stuff.OverMineable
 		}
 
 		//if found fogged:
-		public static AcceptanceReport BlueprintExistsAcceptance(Map map, IntVec3 center, ThingDef entDef)
+		public static AcceptanceReport BlueprintOverFogAcceptance(Map map, IntVec3 center, ThingDef entDef)
 		{
 			if (!OverMineable.PlaySettings_BlueprintOverRockToggle.blueprintOverRock)
 				return new AcceptanceReport("CannotPlaceInUndiscovered".Translate());
@@ -131,6 +131,7 @@ namespace Replace_Stuff.OverMineable
 					yield return new CodeInstruction(OpCodes.Beq, continueLabel);//if( ... == ... ) continue;
 
 
+					/* 1.6 replaceTags should cover this
 					// if(thingList[i].def.building.isPowerConduit)
 					//	continue;
 					foreach (CodeInstruction ci in currentThing)
@@ -138,6 +139,7 @@ namespace Replace_Stuff.OverMineable
 
 					yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(FixConduitPlaceWorker), nameof(IsConduit))); // ... .IsConduit()
 					yield return new CodeInstruction(OpCodes.Brtrue, continueLabel);// if(...) continue;
+					*/
 				}
 				yield return i;
 			}

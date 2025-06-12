@@ -36,14 +36,14 @@ namespace Replace_Stuff.OverMineable
 					
 					yield return new CodeInstruction(list[i - 3].opcode);//thing; Ld_loc_0
 					yield return new CodeInstruction(OpCodes.Ldarg_0);//Thing constructible
-					yield return new CodeInstruction(OpCodes.Call, ToBeSmoothedInfo);// ToBeSmoothed(worker, thing, constructible)
+					yield return new CodeInstruction(OpCodes.Call, ToBeSmoothedInfo);// ToBeSmoothed(thing, constructible)
 					yield return new CodeInstruction(OpCodes.Brfalse, otherwise);//if(ToBeSmoothed){...}
 
 					yield return new CodeInstruction(OpCodes.Ldarg_1);//worker
 					yield return new CodeInstruction(list[i - 3].opcode);//thing; Ld_loc_0
 					yield return new CodeInstruction(OpCodes.Ldarg_2);//forced
 					yield return new CodeInstruction(OpCodes.Call, SmoothItJobInfo);
-					yield return new CodeInstruction(OpCodes.Ret);//return SmoothItJob(worker,thing,forced)
+					yield return new CodeInstruction(OpCodes.Ret);//return SmoothItJob(worker, thing, forced)
 				}
 			}
 		}

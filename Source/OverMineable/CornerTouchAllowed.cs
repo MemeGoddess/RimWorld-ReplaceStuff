@@ -17,11 +17,11 @@ namespace Replace_Stuff.OverMineable
 	public static class IsCornerTouchAllowed
 	{
 		//public static bool IsCornerTouchAllowed(int cornerX, int cornerZ, int adjCardinal1X, int adjCardinal1Z, int adjCardinal2X, int adjCardinal2Z, PathingContext pc)
-		public static void Postfix(ref bool __result, int cornerX, int cornerZ, PathingContext pc)
+		public static void Postfix(ref bool __result, IntVec3 corner, PathingContext pc)
 		{
 			if (!__result)
 			{
-				foreach (Thing thing in pc.map.thingGrid.ThingsListAtFast(new IntVec3(cornerX, 0, cornerZ)))
+				foreach (Thing thing in pc.map.thingGrid.ThingsListAtFast(corner))
 					if (thing is Blueprint || thing is Frame && TouchPathEndModeUtility.MakesOccupiedCellsAlwaysReachableDiagonally(thing.def))
 					{
 						__result = true;
@@ -92,17 +92,18 @@ namespace Replace_Stuff.OverMineable
 			}
 		}
 
-		//public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> nearPlaceValidator = null, Rot4 rot = default(Rot4))
-		public static bool TryPlaceThingInSameRoom(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction, Predicate<IntVec3> nearPlaceValidator, Rot4 rot, Pawn miner)
+		//public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> extraValidator = null, Rot4? rot = null, int squareRadius = 1)
+		public static bool TryPlaceThingInSameRoom(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> extraValidator = null, Rot4? rot = null, int squareRadius = 1, Pawn miner = null)
 		{
-			//Given that nearPlaceValidator will be null as it's a call from TrySpawnYield:
-			
 			//For godmode mining there is no pawn
 			if (miner != null)
+			{
+				Predicate<IntVec3> newValidator = (IntVec3 pos) => pos.GetRoom(miner.Map) == miner.GetRoom();
 				//(Good luck setting this up in ILCode so I'll do it here)
-				nearPlaceValidator = pos => pos.GetRoom(miner.Map) == miner.GetRoom();
+				extraValidator = extraValidator == null ? newValidator : pos => extraValidator(pos) && newValidator(pos);
+			}
 
-			return GenPlace.TryPlaceThing(thing, center, map, mode, placedAction, nearPlaceValidator, rot);
+			return GenPlace.TryPlaceThing(thing, center, map, mode, placedAction, extraValidator, rot);
 		}
 	}
 }

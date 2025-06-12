@@ -137,7 +137,7 @@ namespace Replace_Stuff
 		
 		public static ThingDef NewReplaceFrameDef_Thing(ThingDef def)
 		{
-			ThingDef thingDef = ThingDefGenerator_ReplaceFrame.BaseFrameDef();
+			ThingDef thingDef = BaseReplaceFrameDef();
 			thingDef.defName = def.defName + "_ReplaceStuff";
 			thingDef.label = def.label + "TD.ReplacingTag".Translate();//Not entirely sure if this is needed since ReplaceFrame.Label doesn't use it, but, this is vanilla Frame code.
 			thingDef.size = def.size;
@@ -157,7 +157,7 @@ namespace Replace_Stuff
 
 			if (def.size.x <= 4 && def.size.z <= 4)
 			{
-				thingDef.drawerType = DrawerType.MapMeshOnly;
+				thingDef.drawerType = DrawerType.RealtimeOnly;
 				thingDef.graphicData = new GraphicData();
 				thingDef.graphicData.graphicClass = typeof(Graphic_Single);
 				thingDef.graphicData.texPath = $"ReplaceStuffFrame/{def.size.x}x{def.size.z}";
@@ -179,7 +179,7 @@ namespace Replace_Stuff
 			return thingDef;
 		}
 
-		static ThingDef BaseFrameDef()
+		static ThingDef BaseReplaceFrameDef()
 		{
 			return new ThingDef
 			{
@@ -199,5 +199,8 @@ namespace Replace_Stuff
 				leaveResourcesWhenKilled = true
 			};
 		}
+
+		public static bool IsReplaceFrame(this ThingDef def) => def.thingClass == typeof(ReplaceFrame);
+
 	}
 }

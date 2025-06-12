@@ -69,10 +69,58 @@
     <Publicize Include="Assembly-CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" Exclude="obj\**\*" />
+    <Compile Include="BlueprintReplace\DesignatorBuild.cs" />
+    <Compile Include="BlueprintReplace\DesignatorInstall.cs" />
+    <Compile Include="CoolersOverWalls\AllowBuildPlugged.cs" />
+    <Compile Include="CoolersOverWalls\CoolerWallShare.cs" />
+    <Compile Include="CoolersOverWalls\DesignatorBuildDropdownStuffFix.cs" />
+    <Compile Include="CoolersOverWalls\WideVentLocation.cs" />
+    <Compile Include="DebugLog.cs" />
+    <Compile Include="DestroyedRestore\BlueprintRemoval.cs" />
+    <Compile Include="DestroyedRestore\BuildingReviver.cs" />
+    <Compile Include="DestroyedRestore\DestroyedBuildings.cs" />
+    <Compile Include="DestroyedRestore\ReviveBuilding.cs" />
+    <Compile Include="NewThing\BlocksConstruction.cs" />
+    <Compile Include="NewThing\CanReplaceNewThingOverOldThing.cs" />
+    <Compile Include="NewThing\DeconstructOriginal.cs" />
+    <Compile Include="NewThing\DeconstructWork.cs" />
+    <Compile Include="NewThing\IgnoreInteractionSpotOverlap.cs" />
+    <Compile Include="NewThing\NewThingFrame.cs" />
+    <Compile Include="NewThing\TransferSettings.cs" />
+    <Compile Include="Other\FramesDontBlock.cs" />
+    <Compile Include="Other\PawnBlockConstruction.cs" />
+    <Compile Include="OverMineable\BlueprintOverFogged.cs" />
+    <Compile Include="OverMineable\BlueprintOverRockToggle.cs" />
+    <Compile Include="OverMineable\CanPlaceBlueprintOverMineable.cs" />
+    <Compile Include="OverMineable\CornerTouchAllowed.cs" />
+    <Compile Include="OverMineable\DeliverUnderRock.cs" />
+    <Compile Include="OverMineable\DontMineSmoothingRock.cs" />
+    <Compile Include="OverMineable\FoggedSelectable.cs" />
+    <Compile Include="OverMineable\InteractionSpot.cs" />
+    <Compile Include="OverMineable\ShowGhostOverFog.cs" />
+    <Compile Include="PlaceBridges\BridgelikeTerrain.cs" />
+    <Compile Include="PlaceBridges\CancelBridgeCancelsBlueprintAbove.cs" />
+    <Compile Include="PlaceBridges\CanPlaceBlueprint.cs" />
+    <Compile Include="PlaceBridges\DesignatorBuildCostCountsBridges.cs" />
+    <Compile Include="PlaceBridges\HandleBlocksConstruction.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Replace\DesignatorReplaceStuff.cs" />
+    <Compile Include="Replace\DisableThings.cs" />
+    <Compile Include="Replace\GenReplace.cs" />
+    <Compile Include="Replace\InterceptBlueprint.cs" />
+    <Compile Include="Replace\CanReplaceAnyStuff.cs" />
+    <Compile Include="Replace\NoDeconstructForBlueprint.cs" />
+    <Compile Include="Replace\NoWallAttachment.cs" />
+    <Compile Include="Replace\ReplaceFrame.cs" />
+    <Compile Include="Replace\ReplaceFrameNoWipe.cs" />
+    <Compile Include="Replace\ReserveSharing.cs" />
+    <Compile Include="Replace_Stuff.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Utilities\PatchCompilerGenerated.cs" />
+    <Compile Include="Utilities\RemoveThingFromStatWorkerCache.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.*" ExcludeAssets="runtime"/>
+    <PackageReference Include="Lib.Harmony" Version="2.*" ExcludeAssets="runtime" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

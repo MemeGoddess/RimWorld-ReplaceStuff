@@ -92,6 +92,13 @@ namespace Replace_Stuff.NewThing
 				return result;
 			} 
 
+			// 1.6 added some tags for replacement. Add them here so Replace Stuff does then in-place
+			if(GenConstruct.HasMatchingReplacementTag(newDef, oldDef))
+			{
+				_replacementCache.Add((newDef, oldDef), true);
+				return true;
+			}
+
 			foreach (var r in replacements)
 			{
 				if (!r.Matches(newDef, oldDef)) continue;
@@ -130,7 +137,11 @@ namespace Replace_Stuff.NewThing
 			//---------------------------------------------
 			//---------------------------------------------
 			//Here are valid replacements:
+
+			// walls/fences/door
 			replacements.Add(new Replacement(d => d.IsWall() || (d.building?.isPlaceOverableWall ?? false) || (d.building?.isFence ?? false) || typeof(Building_Door).IsAssignableFrom(d.thingClass)));
+
+			// coolers
 			replacements.Add(new Replacement(d => typeof(Building_Cooler).IsAssignableFrom(d.thingClass),
 				postAction: (n, o) =>
 				{
@@ -140,6 +151,8 @@ namespace Replace_Stuff.NewThing
 					newCooler.compTempControl.targetTemperature = oldCooler.compTempControl.targetTemperature;
 				}
 				));
+			
+			// beds
 			bool isBed(ThingDef d) { return typeof(Building_Bed).IsAssignableFrom(d.thingClass); }
 			replacements.Add(new Replacement(
 				d => isBed(d) && d.GetStatValueAbstract(StatDefOf.WorkToBuild) > 0f,
@@ -153,10 +166,13 @@ namespace Replace_Stuff.NewThing
 					oldBed.OwnersForReading.ListFullCopy().ForEach(p => p.ownership.ClaimBedIfNonMedical(newBed));
 				}
 				));
+
+			// fences as a category (a mod)
 			DesignationCategoryDef fencesDef = DefDatabase<DesignationCategoryDef>.GetNamed("Fences", false);
 			if (fencesDef != null)
 				replacements.Add(new Replacement(d => d.designationCategory == fencesDef));
 
+			// Workbenches: fueld to electric
 			Action<Thing, Thing> transferBills = (n, o) =>
 				{
 					Building_WorkTable newTable = n as Building_WorkTable;
@@ -167,17 +183,20 @@ namespace Replace_Stuff.NewThing
 						newTable.BillStack.AddBill(bill);
 					}
 				};
-			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricStove, n => n == NewThingDefOf.FueledStove, transferBills));
-			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricTailoringBench, n => n == NewThingDefOf.HandTailoringBench, transferBills));
+			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricStove, old => old == NewThingDefOf.FueledStove, transferBills));
+			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricTailoringBench, old => old == NewThingDefOf.HandTailoringBench, transferBills));
 
+			// Just tables.
 			replacements.Add(new Replacement(d => d.IsTable));
 
+			// Fridges from a mod
 			replacements.Add(new Replacement(d => d.thingClass == FridgeCompat.fridgeType,
 				postAction: (n, o) =>
 				{
 					FridgeCompat.DesiredTempInfo.SetValue(n, FridgeCompat.DesiredTempInfo.GetValue(o));
 				}));
 
+			/* 1.6 added these as replaceTags (handled in CanReplace):
 			replacements.Add(new Replacement(d => d.building?.isSittable ?? false));
 
 			// Also requires PlaceWorker changes to match this
@@ -185,6 +204,8 @@ namespace Replace_Stuff.NewThing
 				(d.building?.isPowerConduit ?? false)
 				|| typeof(Building_PowerSwitch).IsAssignableFrom(d.thingClass),
 				o => o.building?.isPowerConduit ?? false));
+			*/ 
+
 			//---------------------------------------------
 			//---------------------------------------------
 		}
