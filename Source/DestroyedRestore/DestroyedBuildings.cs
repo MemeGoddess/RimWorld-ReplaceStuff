@@ -10,7 +10,7 @@ using HarmonyLib;
 
 namespace Replace_Stuff.DestroyedRestore
 {
-	[HarmonyPatch(typeof(ThingUtility), nameof(ThingUtility.CheckAutoRebuildOnDestroyed_NewTemp))]
+	[HarmonyPatch(typeof(ThingUtility), nameof(ThingUtility.CheckAutoRebuildOnDestroyed))]
 	static class SaveDestroyedBuildings
 	{
 		//public static void CheckAutoRebuildOnDestroyed(Thing thing, DestroyMode mode, Map map, BuildableDef buildingDef)

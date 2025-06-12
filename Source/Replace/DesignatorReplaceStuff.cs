@@ -19,13 +19,7 @@ namespace Replace_Stuff
 	{
 		private ThingDef stuffDef;
 
-		public override int DraggableDimensions
-		{
-			get
-			{
-				return 2;
-			}
-		}
+		public override DrawStyleCategoryDef DrawStyleCategory => DrawStyleCategoryDefOf.Orders;
 
 		private static readonly Vector2 DragPriceDrawOffset = new Vector2(19f, 17f);
 
