@@ -6,4 +6,13 @@
 			<li>Replace_Stuff.Designator_ReplaceStuff</li>
 		</value>
 	</Operation>
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="Wall"]/building/relatedBuildCommands</xpath>
+		<value>
+			<li>Cooler_Over</li>
+			<li>Cooler_Over2W</li>
+			<li>Vent_Over</li>
+		</value>
+	</Operation>
 </Patch>
