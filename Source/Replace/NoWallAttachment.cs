@@ -38,9 +38,8 @@ namespace Replace_Stuff
 				yield return inst;
 
 				// Before we get the thing.def, use the thing:
-				if (i + 1 > insts.Count && insts[i + 1].LoadsField(defInfo))
+				if (i + 1 < insts.Count && insts[i + 1].LoadsField(defInfo))
 				{
-					Log.Message($"TPILE!");
 					// stack has: Thing thing from the list
 					yield return new CodeInstruction(OpCodes.Isinst, typeof(ReplaceFrame));// thing == typeof(ReplaceFrame)
 					yield return new CodeInstruction(OpCodes.Brtrue_S, continueLabel);// if(thing == typeof(ReplaceFrame)) continue;
