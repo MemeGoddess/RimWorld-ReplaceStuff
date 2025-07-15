@@ -28,6 +28,9 @@ jobs:
         working-directory: mod
         run: msbuild "Replace Stuff.sln" /p:Configuration=Release /p:Platform="Any CPU"
 
+      - name: Tree
+        run: tree /f /a mod
+        
       - name: Cleanup
         working-directory: mod
         run: |
