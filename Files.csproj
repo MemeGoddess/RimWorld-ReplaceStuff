@@ -28,7 +28,6 @@
   </Target>
   <Target Name="Restore" />
   <Target Name="Build">
-    <Copy Condition=" '$(Configuration)' == 'Release' " SourceFiles="About\About-Release.xml" DestinationFiles="$(OutputPath)About\About.xml" SkipUnchangedFiles="true" />
     <Copy Condition=" '$(Configuration)' == 'Release' " SourceFiles="@(ReleaseFiles)" DestinationFiles="@(ReleaseFiles->'$(OutputPath)%(RelativeDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
   <Target Name="Rebuild" />
