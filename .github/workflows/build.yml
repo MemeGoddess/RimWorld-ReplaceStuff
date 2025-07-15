@@ -31,12 +31,12 @@ jobs:
       - name: Cleanup
         working-directory: mod
         run: |
-            rm -rf .git
-            rm -rf .github/workflows
-            rm -rf .github
-            rm -rf .gitignore
-            rm -rf .gitattributes
-            rm -rf README.md
+            rd /s /q .git
+            rd /s /q .github/workflows
+            rd /s /q .github
+            rd /s /q .gitignore
+            rd /s /q .gitattributes
+            rd /s /q README.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
