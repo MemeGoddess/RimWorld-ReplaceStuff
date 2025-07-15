@@ -1,0 +1,46 @@
+name: Build .NET Framework 4.7.2
+
+on:
+  push:
+    branches:
+      - feat/pipeline
+  pull_request:
+
+jobs:
+  build:
+    name: Build on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+            path: 'mod'
+
+      - name: Setup MSBuild path
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        working-directory: mod
+        run: nuget restore "Source/Replace_Stuff.csproj"
+
+      - name: Build with MSBuild
+        working-directory: mod
+        run: msbuild "Replace Stuff.sln" /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Cleanup
+        working-directory: mod
+        run: |
+            rm -rf .git
+            rm -rf .github/workflows
+            rm -rf .github
+            rm -rf .gitignore
+            rm -rf .gitattributes
+            rm -rf README.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: mod\*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
