@@ -30,11 +30,10 @@ jobs:
 
       - name: Tree
         run: tree /f /a mod
-        
+
       - name: Cleanup
         working-directory: mod
         run: |
-            rd -r .git
             rd -r .github/workflows
             rd -r .github
             rd -r .gitignore
