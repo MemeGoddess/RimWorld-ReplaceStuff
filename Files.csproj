@@ -17,9 +17,8 @@
     <ReleaseFiles Include="About\**;Defs\**;Patches\**;Languages\**;Sounds\**;Textures\**;News\**;LoadFolders.xml" Exclude="About\About-Release.xml;About\About.xml" />
     <AboutFiles Include="About\About.xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include=".github\build.yml" />
+    <Folder Include=".github\" />
   </ItemGroup>
   <Target Name="Clean" />
   <Target Name="_IsProjectRestoreSupported" Returns="@(_ValidProjectsForRestore)">
