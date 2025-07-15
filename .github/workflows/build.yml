@@ -40,10 +40,13 @@ jobs:
             rd -r .gitattributes
             rd -r README.md
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v1.0.0
-          files: mod\*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: steam-workshop-upload
+        uses: m00nl1ght-dev/steam-workshop-deploy@v3
+        continue-on-error: true
+        with: 
+          appId: 294100 # Game's Steam App ID
+          publishedFileId: 3526439840 # Your mod's Steam Workshop ID
+          path: 'mod' # Path to your mod's folder from repository root
+          username: ${{ secrets.STEAM_USERNAME }}
+          configVdf:  ${{ secrets.STEAM_CONFIG_VDF }}
+          changeNote: ${{ github.event.head_commit.message }}
