@@ -26,7 +26,7 @@ jobs:
 
       - name: Build with MSBuild
         working-directory: mod
-        run: msbuild "Replace Stuff.sln" /p:Configuration=Release /p:Platform="Any CPU"
+        run: msbuild "Source/Replace_Stuff.csproj" /p:Configuration=Release /p:Platform="Any CPU"
 
       - name: Tree
         run: tree /f /a mod
