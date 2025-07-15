@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Reflection;
@@ -93,10 +94,22 @@ namespace Replace_Stuff.NewThing
 			} 
 
 			// 1.6 added some tags for replacement. Add them here so Replace Stuff does then in-place
-			if(GenConstruct.HasMatchingReplacementTag(newDef, oldDef))
+			try
 			{
-				_replacementCache.Add((newDef, oldDef), true);
-				return true;
+				if (newDef != null)
+				{
+					if (GenConstruct.HasMatchingReplacementTag(newDef, oldDef))
+					{
+						_replacementCache.Add((newDef, oldDef), true);
+						return true;
+					}
+				}
+			}
+#pragma warning disable CS0168 // Variable is declared but never used
+			catch (Exception ex)
+#pragma warning restore CS0168 // Variable is declared but never used
+			{
+				Debugger.Break();
 			}
 
 			foreach (var r in replacements)
