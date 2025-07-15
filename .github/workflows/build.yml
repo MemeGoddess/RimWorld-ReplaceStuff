@@ -22,7 +22,7 @@ jobs:
 
       - name: Restore NuGet packages
         working-directory: mod
-        run: nuget restore "Replace Stuff.sln"
+        run: nuget restore "Source/Replace_Stuff.csprof"
 
       - name: Build with MSBuild
         working-directory: mod
