@@ -14,9 +14,6 @@ namespace Replace_Stuff
 		{
 			// initialize settings
 			settings = GetSettings<Settings>();
-#if DEBUG
-			Harmony.DEBUG = true;
-#endif
 			new Harmony("Uuugggg.rimworld.Replace_Stuff.main").PatchAll();
 		}
 
