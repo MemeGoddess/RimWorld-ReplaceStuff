@@ -24,12 +24,15 @@ jobs:
 
       # Will need to install workshop dependencies
 
+      - name: Remove old binary
+        working-directory: mod/1.6/Assemblies/
+        run: |
+            rm -f Replace_Stuff.dll
+            rm -f Replace_Stuff.pdb
+
       - name: Build with dotnet build
         working-directory: mod
         run: dotnet build "Source/Replace_Stuff.csproj" --configuration Release
-
-      - name: Tree
-        run: tree mod
 
       - name: Cleanup
         working-directory: mod
