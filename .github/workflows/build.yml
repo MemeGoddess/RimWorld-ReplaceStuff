@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    name: Build on Windows
-    runs-on: windows-latest
+    name: Build
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -17,28 +17,29 @@ jobs:
         with:
             path: 'mod'
 
-      - name: Setup MSBuild path
-        uses: microsoft/setup-msbuild@v2
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-      - name: Restore NuGet packages
-        working-directory: mod
-        run: nuget restore "Source/Replace_Stuff.csproj"
+      # Will need to install workshop dependencies
 
-      - name: Build with MSBuild
+      - name: Build with dotnet build
         working-directory: mod
-        run: msbuild "Source/Replace_Stuff.csproj" /p:Configuration=Release /p:Platform="Any CPU"
+        run: dotnet build "Source/Replace_Stuff.csproj" --configuration Release
 
       - name: Tree
-        run: tree /f /a mod
+        run: tree mod
 
       - name: Cleanup
         working-directory: mod
         run: |
-            rd -r .github/workflows
-            rd -r .github
-            rd -r .gitignore
-            rd -r .gitattributes
-            rd -r README.md
+            rm -rf .github/workflows
+            rm -rf .github
+            rm -rf .gitignore
+            rm -rf .gitattributes
+            rm -rf README.md
+            rm -rf Workshop
 
       - name: steam-workshop-upload
         uses: m00nl1ght-dev/steam-workshop-deploy@v3
