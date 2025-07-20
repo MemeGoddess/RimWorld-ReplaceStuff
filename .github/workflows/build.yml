@@ -34,12 +34,15 @@ jobs:
       - name: Cleanup
         working-directory: mod
         run: |
+            rm -rf .git
+            rm -rf .vs
             rm -rf .github/workflows
             rm -rf .github
             rm -rf .gitignore
             rm -rf .gitattributes
             rm -rf README.md
             rm -rf Workshop
+            find . -type d -name "obj" -exec rm -rf {} +
 
       - name: steam-workshop-upload
         uses: m00nl1ght-dev/steam-workshop-deploy@v3
