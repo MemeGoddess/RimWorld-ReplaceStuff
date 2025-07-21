@@ -3,8 +3,7 @@ name: Build and Deploy to Steam Workshop
 on:
   push:
     branches:
-      - feat/pipeline
-  pull_request:
+      - master
 
 jobs:
   build:
