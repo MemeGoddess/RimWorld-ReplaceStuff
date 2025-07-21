@@ -14,6 +14,9 @@ runs:
       cd ${{ inputs.path }}
       cp  ${{ github.action_path }}/setup.sh .
       chmod +x setup.sh
+      
+      # Seriously? Line endings?
+      sed -i 's/\r$//' setup.sh
 
       docker run --rm \
         -v $(pwd):/workspace \
