@@ -20,7 +20,7 @@ workshop() {
         echo "Workshop items: '$workshopItems'"
     else
         echo "RequiredWorkshopItems.txt file not found. Nothing to download."
-        exit 1
+        return
     fi
 
     # Set the download location to Workshop
