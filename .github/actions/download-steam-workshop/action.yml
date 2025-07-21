@@ -17,7 +17,7 @@ runs:
       docker run --rm \
         -v $(pwd):/workspace \
         -w /workspace \
-        --entrypoint /setup.sh \
+        --entrypoint ./setup.sh \
         steamcmd/steamcmd:ubuntu-22
 
       rm setup.sh
