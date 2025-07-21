@@ -14,7 +14,7 @@ function workshop {
         Write-Host "Workshop items: '$workshopItems'"
     } else {
         Write-Host "RequiredWorkshopItems.txt file not found. Nothing to download."
-        exit 1
+        return
     }
 
     # Set the download location to Workshop
