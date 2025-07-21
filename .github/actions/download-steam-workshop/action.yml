@@ -21,10 +21,10 @@ runs:
       docker run --rm \
         -v $(pwd):/workspace \
         -w /workspace \
-        --user 1000:1000 \
         --entrypoint ./setup.sh \
         steamcmd/steamcmd:ubuntu-22
 
       rm setup.sh
       ls Workshop
+      chmod 777 -R Workshop
         
