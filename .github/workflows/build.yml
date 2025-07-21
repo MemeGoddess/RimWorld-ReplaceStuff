@@ -54,7 +54,7 @@ jobs:
         continue-on-error: true
         with: 
           appId: 294100 # Game's Steam App ID
-          publishedFileId: 3526439840 # Your mod's Steam Workshop ID
+          publishedFileId: 3526354009 # Your mod's Steam Workshop ID
           path: 'mod' # Path to your mod's folder from repository root
           username: ${{ secrets.STEAM_USERNAME }}
           configVdf:  ${{ secrets.STEAM_CONFIG_VDF }}
