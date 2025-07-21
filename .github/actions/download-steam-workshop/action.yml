@@ -12,7 +12,7 @@ runs:
     shell: bash
     run: |
       cd ${{ inputs.path }}
-      cp  ${{ github.workspace }}/setup.sh .
+      cp  ${{ github.action_path }}/setup.sh .
 
       docker run --rm \
         -v $(pwd):/workspace \
