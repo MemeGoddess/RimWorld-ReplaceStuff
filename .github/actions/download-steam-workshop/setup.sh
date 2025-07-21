@@ -1,3 +1,5 @@
+#!/bin/bash
+
 workshop() {
     if command -v steamcmd >/dev/null 2>&1; then
         echo "steamcmd is installed."
