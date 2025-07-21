@@ -1,8 +1,13 @@
 name: Download Steam Workshop Dependencies
 description: Downloads Steam Workshop items required for the project.
 runs:
-  using: composite
+  using: "docker"
+  image: Dockerfile
   steps:
-  - name: Pull Workshop Items
-    shell: pwsh
-    run: ./setup.ps1
+  - name: Download Steam Workshop Items with Docker
+    run: |
+      docker run --rm \
+        -v $(pwd):/workspace \
+        -w /workspace \
+        steamcmd/steamcmd:ubuntu-22 \
+        ${{ github.action_path }}/setup.sh
