@@ -1,4 +1,4 @@
-name: Build .NET Framework 4.7.2
+name: Build and Deploy to Steam Workshop
 
 on:
   push:
@@ -22,7 +22,8 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      # Will need to install workshop dependencies
+      - name: Download Steam Workshop Dependencies
+        uses: ./mod/.github/actions/download-steam-workshop
 
       - name: Remove old binary
         working-directory: mod/1.6/Assemblies/

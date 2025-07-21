@@ -1,0 +1,8 @@
+name: Download Steam Workshop Dependencies
+description: Downloads Steam Workshop items required for the project.
+runs:
+  using: 'powershell'
+  steps:
+  - name: Pull Workshop Items
+    if: ${{ exists('RequiredWorkshopItems.txt') }}
+    run: ./setup.ps1
