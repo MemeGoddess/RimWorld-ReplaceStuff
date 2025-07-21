@@ -47,7 +47,7 @@ jobs:
             rm -rf .gitignore
             rm -rf .gitattributes
             rm -rf README.md
-            rm -rf Workshop
+            sudo rm -rf Workshop
             find . -type d -name "obj" -exec rm -rf {} +
 
       - name: steam-workshop-upload

@@ -25,6 +25,4 @@ runs:
         steamcmd/steamcmd:ubuntu-22
 
       rm setup.sh
-      ls Workshop
-      chmod 777 -R Workshop
         
