@@ -24,7 +24,7 @@ jobs:
 
       - name: Download Steam Workshop Dependencies
         uses: ./mod/.github/actions/download-steam-workshop
-        withL: 
+        with: 
           path: 'mod'
 
       - name: Remove old binary
