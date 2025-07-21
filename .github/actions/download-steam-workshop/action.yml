@@ -7,9 +7,9 @@ inputs:
     description: 'The path of the directory to be uploaded, relative to the repository root.'
 runs:
   using: composite
-  shell: bash
   steps:
   - name: Download Steam Workshop Items with Docker
+    shell: bash
     run: |
       cd ${{ inputs.path }}
 
