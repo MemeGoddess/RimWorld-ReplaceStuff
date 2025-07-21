@@ -13,6 +13,8 @@ runs:
     run: |
       cd ${{ inputs.path }}
 
+      echo $(pwd)
+
       docker run --rm \
         -v $(pwd):/workspace \
         -w /workspace \
