@@ -40,6 +40,6 @@ workshop() {
 }
 
 # Call the function
-workshop()
+workshop
 
 echo "Setup complete. Solution should be buildable now."
