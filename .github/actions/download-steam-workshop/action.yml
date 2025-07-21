@@ -1,11 +1,18 @@
 name: Download Steam Workshop Dependencies
 description: Downloads Steam Workshop items required for the project.
+inputs:
+  path:
+    required: false
+    default: ''
+    description: 'The path of the directory to be uploaded, relative to the repository root.'
 runs:
   using: "docker"
   image: Dockerfile
   steps:
   - name: Download Steam Workshop Items with Docker
     run: |
+      cd ${{ inputs.path }}
+
       docker run --rm \
         -v $(pwd):/workspace \
         -w /workspace \

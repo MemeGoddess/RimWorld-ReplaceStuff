@@ -24,7 +24,8 @@ jobs:
 
       - name: Download Steam Workshop Dependencies
         uses: ./mod/.github/actions/download-steam-workshop
-        working-directory: mod
+        withL: 
+          path: 'mod'
 
       - name: Remove old binary
         working-directory: mod/1.6/Assemblies/
