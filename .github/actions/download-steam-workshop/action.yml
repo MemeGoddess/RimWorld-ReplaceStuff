@@ -4,5 +4,5 @@ runs:
   using: composite
   steps:
   - name: Pull Workshop Items
-    shell: powershell
+    shell: pwsh
     run: ./setup.ps1
