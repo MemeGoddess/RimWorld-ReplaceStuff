@@ -13,11 +13,12 @@ runs:
     run: |
       cd ${{ inputs.path }}
       cp  ${{ github.action_path }}/setup.sh .
+      chmod +x setup.sh
 
       docker run --rm \
         -v $(pwd):/workspace \
         -w /workspace \
-        --entrypoint "sh ./setup.sh" \
+        --entrypoint ./setup.sh \
         steamcmd/steamcmd:ubuntu-22
 
       rm setup.sh
