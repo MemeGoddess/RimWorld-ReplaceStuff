@@ -6,8 +6,7 @@ inputs:
     default: ''
     description: 'The path of the directory to be uploaded, relative to the repository root.'
 runs:
-  using: "docker"
-  image: Dockerfile
+  using: composite
   steps:
   - name: Download Steam Workshop Items with Docker
     run: |
