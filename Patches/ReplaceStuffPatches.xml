@@ -15,4 +15,13 @@
 			<li>Vent_Over</li>
 		</value>
 	</Operation>
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/ThingDef[defName="Door"]/building</xpath>
+		<value>
+			<relatedBuildCommands>
+				<li>Autodoor</li>
+			</relatedBuildCommands>
+		</value>
+	</Operation>
 </Patch>
