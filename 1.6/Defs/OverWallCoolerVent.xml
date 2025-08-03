@@ -46,7 +46,7 @@
 		</graphicData>
 		<altitudeLayer>BuildingOnTop</altitudeLayer>
 		<passability>PassThroughOnly</passability>
-		<coversFloor>false</coversFloor>
+		<coversFloor>true</coversFloor>
 		<blockLight>false</blockLight>
 		<castEdgeShadows>false</castEdgeShadows>
 		<building>
