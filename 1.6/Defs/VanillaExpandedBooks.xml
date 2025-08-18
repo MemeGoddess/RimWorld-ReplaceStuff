@@ -3,6 +3,7 @@
 		<defName>ReplaceStuffModCompat_VanillaExpandedBooks</defName>
 		<replaceLists>
 			<li>
+				<category>VBE_WritersTables</category>
 				<items>
 					<li>VBE_WritersTable</li>
 					<li>VBE_TypewritersTable</li>
