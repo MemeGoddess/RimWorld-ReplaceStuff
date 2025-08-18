@@ -214,15 +214,38 @@ namespace Replace_Stuff.NewThing
 					FridgeCompat.DesiredTempInfo.SetValue(n, FridgeCompat.DesiredTempInfo.GetValue(o));
 				}));
 
+			// Allow all "plant growable items" to replace each other, and when they do attempt to set the growing plant type
+			replacements.Add(new Replacement(
+				building => typeof(IPlantToGrowSettable).IsAssignableFrom(building.thingClass),
+				postAction: (newItem, oldItem) =>
+				{
+					((IPlantToGrowSettable)newItem).SetPlantDefToGrow(((IPlantToGrowSettable)oldItem).GetPlantDefToGrow());
+				}));
+
+			replacements.Add(new Replacement(
+				building => typeof(Building_Battery).IsAssignableFrom(building.thingClass)));
+
+			// We can use placeWorkers and comps to check what kind of power is being generated so that we don't have to worry
+			// about each item individually
+			replacements.Add(new Replacement(
+				building => building.placeWorkers?.Any(placeWorker =>
+					placeWorker == typeof(PlaceWorker_WatermillGenerator)) ?? false));
+			replacements.Add(new Replacement(
+				building => building.placeWorkers?.Any(placeWorker =>
+					placeWorker == typeof(PlaceWorker_WindTurbine)) ?? false));
+			replacements.Add(new Replacement(
+				building => building.placeWorkers?.Any(placeWorker =>
+					placeWorker == typeof(PlaceWorker_OnSteamGeyser)) ?? false));
+
 			/* 1.6 added these as replaceTags (handled in CanReplace):
 			replacements.Add(new Replacement(d => d.building?.isSittable ?? false));
 
 			// Also requires PlaceWorker changes to match this
-			replacements.Add(new Replacement(d => 
+			replacements.Add(new Replacement(d =>
 				(d.building?.isPowerConduit ?? false)
 				|| typeof(Building_PowerSwitch).IsAssignableFrom(d.thingClass),
 				o => o.building?.isPowerConduit ?? false));
-			*/ 
+			*/
 
 			//---------------------------------------------
 			//---------------------------------------------
