@@ -122,8 +122,7 @@ namespace Replace_Stuff.NewThing
 			{
 				TransferBills(newThing, oldThing);
 
-				// There's some mods doing weird stuff with storage settings. Need to delay this for it to apply
-				LongEventHandler.QueueLongEvent(() => TransferStorageSettings(newThing, oldThing), null, true, null);
+				TransferStorageSettings(newThing, oldThing);
 			}
 
 			replacements.ForEach(r =>
@@ -158,9 +157,8 @@ namespace Replace_Stuff.NewThing
 			if (n is not Building_Storage newStore || o is not Building_Storage oldStore)
 				return;
 
-			var item = ThingDef.Named("PsychicSoothePulser");
-
-  			newStore.settings.CopyFrom(oldStore.settings);
+			// There's some mods doing weird stuff with storage settings. Need to delay this for it to apply
+			TickScheduler.NextTick(() => newStore.settings.CopyFrom(oldStore.settings));
 		}
 
 
