@@ -11,14 +11,6 @@ using Verse;
 
 namespace Replace_Stuff.NewThing
 {
-	[DefOf]
-	public static class NewThingDefOf
-	{
-		public static ThingDef ElectricStove;
-		public static ThingDef FueledStove;
-		public static ThingDef HandTailoringBench;
-		public static ThingDef ElectricTailoringBench;
-	}
 	[StaticConstructorOnStartup]
 	public static class FridgeCompat
 	{
@@ -75,7 +67,7 @@ namespace Replace_Stuff.NewThing
 					replaceAction(n, o);
 				}
 			}
-		}
+}
 
 		public static List<Replacement> replacements;
 		private static Dictionary<(ThingDef, ThingDef), bool> _replacementCache = new ();
@@ -126,6 +118,14 @@ namespace Replace_Stuff.NewThing
 
 		public static void FinalizeNewThingReplace(this Thing newThing, Thing oldThing)
 		{
+			if (_replacementCache.TryGetValue((newThing.def, oldThing.def), out var result))
+			{
+				TransferBills(newThing, oldThing);
+
+				// There's some mods doing weird stuff with storage settings. Need to delay this for it to apply
+				LongEventHandler.QueueLongEvent(() => TransferStorageSettings(newThing, oldThing), null, true, null);
+			}
+
 			replacements.ForEach(r =>
 			{
 				if (r.Matches(newThing.def, oldThing.def))
@@ -140,6 +140,27 @@ namespace Replace_Stuff.NewThing
 				if (r.Matches(newThing.def, oldThing.def))
 					r.PreReplace(newThing, oldThing);
 			});
+		}
+
+		private static void TransferBills(Thing n, Thing o)
+		{
+			if (n is not Building_WorkTable newTable || o is not Building_WorkTable oldTable)
+				return;
+
+			foreach (Bill bill in oldTable.BillStack)
+			{
+				newTable.BillStack.AddBill(bill);
+			}
+		}
+
+		private static void TransferStorageSettings(Thing n, Thing o)
+		{
+			if (n is not Building_Storage newStore || o is not Building_Storage oldStore)
+				return;
+
+			var item = ThingDef.Named("PsychicSoothePulser");
+
+  			newStore.settings.CopyFrom(oldStore.settings);
 		}
 
 
@@ -184,20 +205,6 @@ namespace Replace_Stuff.NewThing
 			DesignationCategoryDef fencesDef = DefDatabase<DesignationCategoryDef>.GetNamed("Fences", false);
 			if (fencesDef != null)
 				replacements.Add(new Replacement(d => d.designationCategory == fencesDef));
-
-			// Workbenches: fueld to electric
-			Action<Thing, Thing> transferBills = (n, o) =>
-				{
-					Building_WorkTable newTable = n as Building_WorkTable;
-					Building_WorkTable oldTable = o as Building_WorkTable;
-
-					foreach (Bill bill in oldTable.BillStack)
-					{
-						newTable.BillStack.AddBill(bill);
-					}
-				};
-			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricStove, old => old == NewThingDefOf.FueledStove, transferBills));
-			replacements.Add(new Replacement(d => d == NewThingDefOf.ElectricTailoringBench, old => old == NewThingDefOf.HandTailoringBench, transferBills));
 
 			// Just tables.
 			replacements.Add(new Replacement(d => d.IsTable));

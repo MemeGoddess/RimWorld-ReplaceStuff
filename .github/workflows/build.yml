@@ -50,7 +50,7 @@ jobs:
             find . -type d -name "obj" -exec rm -rf {} +
 
       - name: steam-workshop-upload
-        uses: m00nl1ght-dev/steam-workshop-deploy@v3
+        uses: m00nl1ght-dev/steam-workshop-deploy@v4
         continue-on-error: true
         with: 
           appId: 294100 # Game's Steam App ID
