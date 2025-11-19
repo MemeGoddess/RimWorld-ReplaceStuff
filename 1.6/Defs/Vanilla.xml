@@ -26,6 +26,14 @@
 			</li>
 
 			<li>
+				<category>WallLights</category>
+				<items>
+					<li>TorchWallLamp</li>
+					<li>WallLamp</li>
+				</items>
+			</li>
+
+			<li>
 				<category>ResearchBenches</category>
 				<items>
 					<li>SimpleResearchBench</li>
