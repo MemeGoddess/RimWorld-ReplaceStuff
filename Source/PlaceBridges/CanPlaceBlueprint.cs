@@ -28,8 +28,6 @@ namespace Replace_Stuff.PlaceBridges
 		//public static bool CanBuildOnTerrain(BuildableDef entDef, IntVec3 c, Map map, Rot4 rot, Thing thingToIgnore = null, ThingDef stuffDef = null)
 		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase method)
 		{
-			Thread.Sleep(4*1000);
-			Debugger.Break();
 			LocalVariableInfo posInfo = method.GetMethodBody().LocalVariables.First(lv => lv.LocalType == typeof(IntVec3));
 			MethodInfo getAffordances = AccessTools.Method(typeof(GridsUtility), nameof(GridsUtility.GetAffordances));
 			MethodInfo listContains = AccessTools.Method(typeof(List<TerrainAffordanceDef>), nameof(List<TerrainAffordanceDef>.Contains));

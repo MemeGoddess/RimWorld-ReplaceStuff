@@ -102,6 +102,8 @@ namespace Replace_Stuff.PlaceBridges
 								bridgesForTerrain[(terDef, needDef)] = possibleBridges;
 							}
 							//Log.Message($"Adding {terDef} => {bridgeTerrains.ToStringSafeEnumerable()} for {affDef} => {needDef}");
+							if(ModsConfig.OdysseyActive)
+								bridgeTerrains?.RemoveAll(x => x.Equals(TerrainDefOf.Substructure));
 							possibleBridges.AddRange(bridgeTerrains);
 						}
 					}
