@@ -21,7 +21,7 @@
 				<category>PoweredGenerators</category>
 				<items>
 					<li>VHGE_HelixienGenerator</li>
-					<li>VHGE_IndustrialHelixienGenerator</li>
+					<li MayRequire="VanillaExpanded.VFEPower">VHGE_IndustrialHelixienGenerator</li>
 				</items>
 			</li>
 			
