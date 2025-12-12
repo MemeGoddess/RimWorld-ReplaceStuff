@@ -74,6 +74,9 @@ namespace Replace_Stuff.NewThing
 
 		public static bool CanReplace(this ThingDef newDef, ThingDef oldDef)
 		{
+			if (!oldDef.building?.deconstructible ?? false)
+				return false;
+
 			newDef = GenConstruct.BuiltDefOf(newDef) as ThingDef;
 			if (newDef == oldDef)
 			{
