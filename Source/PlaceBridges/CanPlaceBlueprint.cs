@@ -118,6 +118,9 @@ namespace Replace_Stuff.PlaceBridges
 			if (bridgeDef == null)
 				return;
 
+			if (!bridgeDef.IsResearchFinished)
+				return;
+
 			if (pos.GetThingList(map).Any(t => t.def.entityDefToBuild == bridgeDef))
 				return;//Already building!
 
