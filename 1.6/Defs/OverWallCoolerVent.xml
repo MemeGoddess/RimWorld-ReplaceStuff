@@ -4,6 +4,10 @@
 	<DesignatorDropdownGroupDef>
 		<defName>OverWallCooler</defName>
 	</DesignatorDropdownGroupDef>
+
+	<DesignatorDropdownGroupDef>
+		<defName>OverWallVent</defName>
+	</DesignatorDropdownGroupDef>
 	
 	<ThingDef ParentName="Cooler" Name="Cooler_Over">
 		<defName>Cooler_Over</defName>
@@ -38,9 +42,10 @@
 		<size>(1,2)</size>
 	</ThingDef>
 
-	<ThingDef ParentName="Vent">
+	<ThingDef ParentName="Vent" Name="Vent_Over">
 		<defName>Vent_Over</defName>
 		<label>over-wall vent</label>
+		<designatorDropdown>OverWallVent</designatorDropdown>
 		<graphicData>
 			<texPath>Vent_Over</texPath>
 		</graphicData>
@@ -57,4 +62,14 @@
 		<designationHotKey>Misc7</designationHotKey>
 	</ThingDef>
 	
+	<ThingDef ParentName="Vent_Over">
+		<defName>Vent_Over2W</defName>
+		<label>over-wall vent (wide)</label>
+		<graphicData>
+			<texPath>Vent_Over2W</texPath>
+			<drawSize>(1,2)</drawSize>
+		</graphicData>
+		<size>(1,2)</size>
+	</ThingDef>
+
 </Defs>
