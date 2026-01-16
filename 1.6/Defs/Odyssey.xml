@@ -1,0 +1,14 @@
+<Defs>
+    <Replace_Stuff.InterchangeableItems MayRequire="Ludeon.RimWorld.Odyssey">
+        <defName>ReplaceStuffModCompat_Odyssey</defName>
+        <replaceLists>
+            <li>
+                <category>Wall</category>
+                <items>
+                    <li>SmoothedSolidIce</li>
+                    <li>SmoothedVacstone</li>
+                </items>
+            </li>
+        </replaceLists>
+    </Replace_Stuff.InterchangeableItems>
+</Defs>

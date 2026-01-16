@@ -3,6 +3,17 @@
 		<defName>ReplaceStuffModCompat_Vanilla</defName>
 		<replaceLists>
 			<li>
+				<category>Wall</category>
+				<items>
+					<li>SmoothedMarble</li>
+					<li>SmoothedGranite</li>
+					<li>SmoothedSandstone</li>
+					<li>SmoothedLimestone</li>
+					<li>SmoothedSlate</li>
+				</items>
+			</li>
+
+			<li>
 				<category>Dressers</category>
 				<items>
 					<li>Dresser</li>
@@ -50,6 +61,13 @@
 
 			<li>
 				<category>Columns</category>
+				<items>
+					<li>Column</li>
+				</items>
+			</li>
+
+			<li>
+				<category>Wall</category>
 				<items>
 					<li>Column</li>
 				</items>
