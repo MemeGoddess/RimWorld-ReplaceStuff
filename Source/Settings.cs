@@ -153,7 +153,8 @@ namespace Replace_Stuff
 			if (Mod.settings.hideOverwallCoolers &&
 				(__instance.PlacingDef == OverWallDef.Cooler_Over ||
 				__instance.PlacingDef == OverWallDef.Cooler_Over2W ||
-				__instance.PlacingDef == OverWallDef.Vent_Over))
+				__instance.PlacingDef == OverWallDef.Vent_Over ||
+				__instance.PlacingDef == OverWallDef.Vent_Over2W))
 			{
 				__result = false;
 				return;
