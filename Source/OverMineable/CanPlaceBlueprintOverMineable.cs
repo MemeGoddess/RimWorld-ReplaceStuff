@@ -67,23 +67,23 @@ namespace Replace_Stuff.OverMineable
 		public static void Prefix(BuildableDef sourceDef, IntVec3 center, Map map, Rot4 rotation, Faction faction)
 		{
 			if (faction != Faction.OfPlayer) return;
+			if (sourceDef is not ThingDef thingDef) return;
 
 			foreach (IntVec3 cell in GenAdj.CellsOccupiedBy(center, rotation, sourceDef.Size))
 			{
-				if (map.designationManager.DesignationAt(cell, DesignationDefOf.Mine) != null)
-					continue;
-
-				if (sourceDef is ThingDef thingDef)
-					foreach (Thing mineThing in map.thingGrid.ThingsAt(cell).Where(t => t.def.IsBlockingRock(sourceDef)))
+				foreach (Thing mineThing in map.thingGrid.ThingsAt(cell).Where(t => t.def.IsBlockingRock(sourceDef)))
+				{
+					if (!DontMineSmoothingRock.ToBeSmoothed(mineThing, thingDef))
 					{
-						if (!DontMineSmoothingRock.ToBeSmoothed(mineThing, thingDef))
-						{
-							map.designationManager.AddDesignation(new Designation(mineThing, DesignationDefOf.Mine));
+						if (map.designationManager.DesignationAt(mineThing.Position, DesignationDefOf.Mine) != null)
+							continue;
 
-							if (mineThing.def.building?.mineableYieldWasteable ?? false)
-								TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.BuildersTryMine);
-						}
+						map.designationManager.AddDesignation(new Designation(mineThing, DesignationDefOf.Mine));
+
+						if (mineThing.def.building?.mineableYieldWasteable ?? false)
+							TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.BuildersTryMine);
 					}
+				}
 			}
 		}
 	}

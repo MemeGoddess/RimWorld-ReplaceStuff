@@ -30,17 +30,39 @@ namespace Replace_Stuff.Replace
 			if (typeof(Building_Door).IsAssignableFrom(thingDef.thingClass))
 				___placingRot = DoorUtility.DoorRotationAt(c, __instance.Map, thingDef.building.preferConnectingToFences);
 
-			List<Thing> replaceables = c.GetThingList(__instance.Map).FindAll(
-				t =>
-					t.Position == c &&
-					t.Rotation == ___placingRot &&
-					Designator_ReplaceStuff.CanReplaceStuffFor(__instance.StuffDef, t, thingDef)
-			);
+
+			//Using simple for loop instead of FindAll for better performance.
+			List<Thing> replaceables = c.GetThingList(__instance.Map);
 
 			if (replaceables.Count == 0)
 				return true;
 
-			Designator_ReplaceStuff.ChooseReplace(replaceables, __instance.StuffDef);
+			Thing firstReplaceable = null;
+			Thing firstBlueprintOrFrame = null;
+
+			for (int i = 0; i < replaceables.Count; i++)
+			{
+				Thing replaceable = replaceables[i];
+
+				if (replaceable.Position != c) continue;
+				if (replaceable.Rotation != ___placingRot) continue;
+				if (!Designator_ReplaceStuff.CanReplaceStuffFor(__instance.StuffDef, replaceable, thingDef)) continue;
+
+				firstReplaceable ??= replaceable;
+
+				if (replaceable is Blueprint_Build || replaceable is Frame)
+				{
+					firstBlueprintOrFrame = replaceable; // If we found a blueprint we replace this instead.
+					break;
+				}
+			}
+
+			Thing thingToReplace = firstBlueprintOrFrame ?? firstReplaceable;
+
+			if (thingToReplace == null)
+				return true;
+
+			Designator_ReplaceStuff.DoReplace(thingToReplace, __instance.stuffDef);
 
 			return false;
 		}
