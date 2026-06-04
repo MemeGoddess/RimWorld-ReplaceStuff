@@ -71,18 +71,17 @@ namespace Replace_Stuff.OverMineable
 
 			foreach (IntVec3 cell in GenAdj.CellsOccupiedBy(center, rotation, sourceDef.Size))
 			{
+				if (map.designationManager.DesignationAt(cell, DesignationDefOf.Mine) != null) continue;
+
 				foreach (Thing mineThing in map.thingGrid.ThingsAt(cell).Where(t => t.def.IsBlockingRock(sourceDef)))
 				{
-					if (!DontMineSmoothingRock.ToBeSmoothed(mineThing, thingDef))
-					{
-						if (map.designationManager.DesignationAt(mineThing.Position, DesignationDefOf.Mine) != null)
-							continue;
+					if (DontMineSmoothingRock.ToBeSmoothed(mineThing, thingDef)) continue;
+					if (map.designationManager.DesignationAt(mineThing.Position, DesignationDefOf.Mine) != null) continue;
 
-						map.designationManager.AddDesignation(new Designation(mineThing, DesignationDefOf.Mine));
+					map.designationManager.AddDesignation(new Designation(mineThing, DesignationDefOf.Mine));
 
-						if (mineThing.def.building?.mineableYieldWasteable ?? false)
-							TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.BuildersTryMine);
-					}
+					if (mineThing.def.building?.mineableYieldWasteable ?? false)
+						TutorUtility.DoModalDialogIfNotKnown(ConceptDefOf.BuildersTryMine);
 				}
 			}
 		}
