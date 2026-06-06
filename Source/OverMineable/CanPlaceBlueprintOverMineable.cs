@@ -76,7 +76,7 @@ namespace Replace_Stuff.OverMineable
 				foreach (Thing mineThing in map.thingGrid.ThingsAt(cell).Where(t => t.def.IsBlockingRock(sourceDef)))
 				{
 					if (DontMineSmoothingRock.ToBeSmoothed(mineThing, thingDef)) continue;
-					if (map.designationManager.DesignationAt(mineThing.Position, DesignationDefOf.Mine) != null) continue;
+					if (map.designationManager.DesignationAt(mineThing.Position, DesignationDefOf.Mine) != null) continue; //Avoid multi boulder designations.
 
 					map.designationManager.AddDesignation(new Designation(mineThing, DesignationDefOf.Mine));
 
