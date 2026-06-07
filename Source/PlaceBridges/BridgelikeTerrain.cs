@@ -14,6 +14,7 @@ namespace Replace_Stuff.PlaceBridges
 		//TODO: group terrains by affordances. eg different water types all have the same set of bridges that would work but are all handled separately
 		private static Dictionary<(TerrainDef, TerrainAffordanceDef), HashSet<TerrainDef>> bridgesForTerrain;
 		public static List<TerrainDef> allBridgeTerrains;
+		public static HashSet<TerrainDef> allBridgeTerrainsLookup;
 
 		private static bool IsFloorBase(this TerrainDef def)
 		{
@@ -70,6 +71,7 @@ namespace Replace_Stuff.PlaceBridges
 
 			bridgesForTerrain = new Dictionary<(TerrainDef, TerrainAffordanceDef), HashSet<TerrainDef>>();
 			allBridgeTerrains = new List<TerrainDef>();
+			allBridgeTerrainsLookup = new HashSet<TerrainDef>();
 
 			//Check for Affordances are actually neeeded by any buildind
 			HashSet<TerrainAffordanceDef> actuallyRequiredAffordances = new HashSet<TerrainAffordanceDef>();
@@ -110,6 +112,7 @@ namespace Replace_Stuff.PlaceBridges
 					if (possibleBridges != null)
 					{
 						allBridgeTerrains.AddRange(possibleBridges);
+						allBridgeTerrainsLookup.AddRange(possibleBridges);
 					}
 					//else
 						//Log.Message($"There is no bridge for {terDef} => {needDef}");
@@ -119,7 +122,7 @@ namespace Replace_Stuff.PlaceBridges
 			Log.Message($"Bridges: {allBridgeTerrains.ToStringSafeEnumerable()}");
 		}
 
-		public static bool IsBridgelike(this BuildableDef tdef) => allBridgeTerrains.Contains(tdef);
+		public static bool IsBridgelike(this BuildableDef tdef) => allBridgeTerrainsLookup.Contains(tdef);
 
 		public static TerrainDef FindBridgeFor(TerrainDef tDef, TerrainAffordanceDef needed, Map map)
 		{

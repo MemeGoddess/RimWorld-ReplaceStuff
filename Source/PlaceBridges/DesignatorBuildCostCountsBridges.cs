@@ -20,33 +20,34 @@ namespace Replace_Stuff.PlaceBridges
 		//protected override void DrawPlaceMouseAttachments(float curX, ref float curY)
 		public static void Postfix(Designator_Build __instance, float curX, ref float curY)
 		{
-			List<TerrainDef> neededBridges = new List<TerrainDef>();
-
 			ThingDef stuff = __instance.StuffDef;
 			DesignationDragger dragger = Find.DesignatorManager.Dragger;
 			IEnumerable<IntVec3> cells = dragger.Dragging ? dragger.DragCells :
 				GenAdj.OccupiedRect(UI.MouseCell(), placingRot(__instance), __instance.PlacingDef.Size).Cells;
 
-			foreach (IntVec3 dragPos in cells)
-				if (PlaceBridges.GetNeededBridge(__instance.PlacingDef, dragPos, __instance.Map, stuff) is TerrainDef tdef)
-					neededBridges.Add(tdef);
-
-			if (neededBridges.Count == 0) return;
-
 			Dictionary<ThingDef, int> bridgeTotalCost = new Dictionary<ThingDef, int>();
+			int bridgeCount = 0;
 			float work = 0;
-			foreach(TerrainDef bridgeDef in neededBridges)
+
+			foreach(IntVec3 dragPos in cells)
 			{
+				if (PlaceBridges.GetNeededBridge(__instance.PlacingDef, dragPos, __instance.Map, stuff) is not TerrainDef bridgeDef) continue;
+
+				bridgeCount++;
 				work += bridgeDef.GetStatValueAbstract(StatDefOf.WorkToBuild);
-				if(bridgeDef.costList != null)
-					foreach (ThingDefCountClass bridgeCost in bridgeDef.costList)
-					{
-						bridgeTotalCost.TryGetValue(bridgeCost.thingDef, out int costCount);
-						bridgeTotalCost[bridgeCost.thingDef] = costCount + bridgeCost.count;
-					}
+
+				if (bridgeDef.costList == null) continue;
+
+				foreach(ThingDefCountClass bridgeCost in bridgeDef.costList)
+				{
+					bridgeTotalCost.TryGetValue(bridgeCost.thingDef, out int costCount);
+					bridgeTotalCost[bridgeCost.thingDef] = costCount + bridgeCost.count;
+				}
 			}
 
-			if(bridgeTotalCost.Count == 0)
+			if (bridgeCount == 0) return;
+
+			if (bridgeTotalCost.Count == 0)
 			{
 				string label = $"{StatDefOf.WorkToBuild.LabelCap}: {work.ToStringWorkAmount()} ({TerrainDefOf.Bridge.LabelCap})"; //Not bridgeCostDef.LabelCap
 
@@ -57,8 +58,11 @@ namespace Replace_Stuff.PlaceBridges
 				Text.Anchor = TextAnchor.UpperLeft;
 			}
 
-			foreach (var (bridgeCostDef, bridgeCostCount) in bridgeTotalCost.Select(x => (x.Key, x.Value)))
+			foreach (KeyValuePair<ThingDef, int> pair in bridgeTotalCost)
 			{
+				ThingDef bridgeCostDef = pair.Key;
+				int bridgeCostCount = pair.Value;
+
 				Widgets.ThingIcon(new Rect(curX, curY, 27f, 27f), bridgeCostDef);
 
 				string label = $"{bridgeCostCount} ({TerrainDefOf.Bridge.LabelCap})"; //Not bridgeCostDef.LabelCap

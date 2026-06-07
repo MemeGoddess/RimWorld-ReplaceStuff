@@ -192,11 +192,33 @@ namespace Replace_Stuff
 
 		public static void FindReplace(Map map, IntVec3 cell, ThingDef stuffDef)
 		{
-			List<Thing> replaceable = cell.GetThingList(map).FindAll(t => CanReplaceStuffFor(stuffDef, t));
+			Thing firstReplaceable = null;
+			Thing firstBlueprintOrFrame = null;
 
-			ChooseReplace(replaceable, stuffDef);
+			List<Thing> replaceables = cell.GetThingList(map);
+
+			// Using simple for loop for better performance.
+			for (int i = 0; i < replaceables.Count; i++)
+			{
+				Thing replaceable = replaceables[i];
+
+				if (!CanReplaceStuffFor(stuffDef, replaceable)) continue;
+
+				firstReplaceable ??= replaceable;
+
+				if (replaceable is Blueprint_Build || replaceable is Frame)
+				{
+					firstBlueprintOrFrame = replaceable;
+					break;
+				}
+			}
+
+			Thing thingToReplace = firstBlueprintOrFrame ?? firstReplaceable;
+
+			DoReplace(thingToReplace, stuffDef);
 		}
 
+		// Unused for the time being.
 		public static void ChooseReplace(List<Thing> replaceables, ThingDef stuffDef)
 		{
 			//TODO Godmode. Replace the thing and kill any blueprints/frames.
