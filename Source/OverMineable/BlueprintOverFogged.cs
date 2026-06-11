@@ -24,7 +24,7 @@ namespace Replace_Stuff.OverMineable
 		}
 	}
 
-	[HarmonyPatch(typeof(GenConstruct), nameof(GenConstruct.CanPlaceBlueprintAt))]
+	[HarmonyPatch(typeof(GenConstruct), nameof(GenConstruct.CanPlaceBlueprintAt_NewTemp))]
 	public static class BlueprintOverFogged
 	{
 		//public static AcceptanceReport CanPlaceBlueprintAt(BuildableDef entDef, IntVec3 center, Rot4 rot, Map map, bool godMode = false, Thing thingToIgnore = null)
@@ -36,23 +36,26 @@ namespace Replace_Stuff.OverMineable
 
 			MethodInfo BlueprintAcceptedInfo = AccessTools.Method(typeof(BlueprintOverFogged), nameof(BlueprintOverFogAcceptance));
 
-			bool foundFogged = false;
-			foreach (CodeInstruction i in instructions)
-			{
-				yield return i;
-				if (foundFogged)  //skip the brfalse after Fogged
-				{
-					//This should probably check for DesignatorContext.designating but then more of this code would need to change
-					yield return new CodeInstruction(OpCodes.Ldarg_3);//map
-					yield return new CodeInstruction(OpCodes.Ldarg_1);//center
-					yield return new CodeInstruction(OpCodes.Ldarg_0);//entDef
-					yield return new CodeInstruction(OpCodes.Call, BlueprintAcceptedInfo);
-					yield return new CodeInstruction(OpCodes.Ret);
-					foundFogged = false;
-				}
-				if (i.Calls(FoggedInfo))
-					foundFogged = true;
-			}
+			CodeInstruction[] blueprintOverFogAcceptanceInstructions =
+			[
+				new CodeInstruction(OpCodes.Ldarg_3), //map
+				new CodeInstruction(OpCodes.Ldarg_1), //center
+				new CodeInstruction(OpCodes.Ldarg_0), //entDef
+				new CodeInstruction(OpCodes.Call, BlueprintAcceptedInfo),
+				new CodeInstruction(OpCodes.Ret)
+			];
+
+			var matcher = new CodeMatcher(instructions);
+
+			matcher.MatchEndForward([
+				new CodeMatch(x => x.Calls(FoggedInfo)),
+				new CodeMatch(OpCodes.Brfalse_S)
+			])
+			.ThrowIfNotMatch("Unable to find GridsUtility.Fogged call, placing structures over fogged areas will not work.")
+			.ThrowIfInvalid("Instructions invalid after patching GridsUtility.Fogged call, placing structures over fogged areas will not work.")
+			.Repeat(x => x.InsertAfter(blueprintOverFogAcceptanceInstructions));
+
+			return matcher.Instructions();
 		}
 
 		//if found fogged:
