@@ -11,4 +11,4 @@ jobs:
         uses: MemeGoddess/RimWorld-Deployment-Pipeline/.github/workflows/deploy.yml@beta
         secrets: inherit
         with:
-            workshopId: '3526439840'
+            workshopId: '3526354009'
