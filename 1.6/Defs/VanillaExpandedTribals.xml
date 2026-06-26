@@ -1,0 +1,27 @@
+<Defs>
+	<Replace_Stuff.InterchangeableItems MayRequire="OskarPotocki.VFE.Tribals">
+		<defName>ReplaceStuffModCompat_VFETribals</defName>
+		<replaceLists>
+			<li>
+				<category>Chair</category>
+				<items>
+					<li>VFET_SittingSpot</li>
+				</items>
+			</li>
+			
+			<li>
+				<category>Campfire</category>
+				<items>
+					<li>VFET_LargeFire</li>
+				</items>
+			</li>
+
+            <li>
+                <category>ResearchBenches</category>
+                <items>
+                    <li>VFET_ResearchSpot</li>
+                </items>
+            </li>
+		</replaceLists>
+	</Replace_Stuff.InterchangeableItems>
+</Defs>

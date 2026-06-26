@@ -205,6 +205,13 @@
 					<li>Shelf</li>
 				</items>
 			</li>
+
+			<li>
+				<category>Campfire</category>
+				<items>
+					<li>Campfire</li>
+				</items>
+			</li>
 		</replaceLists>
 	</Replace_Stuff.InterchangeableItems>
 </Defs>
