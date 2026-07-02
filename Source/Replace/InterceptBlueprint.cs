@@ -62,7 +62,7 @@ namespace Replace_Stuff.Replace
 			if (thingToReplace == null)
 				return true;
 
-			Designator_ReplaceStuff.DoReplace(thingToReplace, __instance.stuffDef);
+			Designator_ReplaceStuff.DoReplace(thingToReplace, __instance.StuffDef);
 
 			return false;
 		}
