@@ -19,6 +19,8 @@ namespace Replace_Stuff.NewThing
 			RefundDeconstruct.__STATIC_STUPID_WAS_NEW_THING = __instance.IsNewThingReplacement(out Thing replacement);
 			if (__instance is ReplaceFrame replaceFrame && replaceFrame.oldThing?.Map?.designationManager?.DesignationOn(replaceFrame.oldThing, DesignationDefOf.Deconstruct) != null)
 				replaceFrame.oldThing.Map.designationManager.TryRemoveDesignationOn(replaceFrame.oldThing, DesignationDefOf.Deconstruct);
+
+			NewThingReplacement.thingReplacementCache.Remove(__instance.thingIDNumber);
 		}
 	}
 

@@ -254,7 +254,7 @@ namespace Replace_Stuff.NewThing
 			//---------------------------------------------
 		}
 
-		private static readonly Dictionary<int, Thing> thingReplacementCache = new Dictionary<int, Thing>();
+		public static readonly Dictionary<int, Thing> thingReplacementCache = new Dictionary<int, Thing>();
 
 		public static bool IsNewThingReplacement(this Thing newThing, out Thing oldThing)
 		{
@@ -267,11 +267,6 @@ namespace Replace_Stuff.NewThing
 
 			if (thingReplacementCache.TryGetValue(thingID, out oldThing))
 				return oldThing != null && !oldThing.Destroyed;
-
-			// Periodic cache clear to ensure it doesn't build up needlessly.
-			// Note to self: find a more reliable way to to this.
-			if (thingReplacementCache.Count > 500)
-				thingReplacementCache.Clear();
 
 			bool result = newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
 			thingReplacementCache[thingID] = result ? oldThing : null;
