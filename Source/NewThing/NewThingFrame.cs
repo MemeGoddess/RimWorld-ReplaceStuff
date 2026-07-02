@@ -254,7 +254,7 @@ namespace Replace_Stuff.NewThing
 			//---------------------------------------------
 		}
 
-		public static readonly Dictionary<int, Thing> thingReplacementCache = new Dictionary<int, Thing>();
+		public static readonly Dictionary<int, Verse.WeakReference<Thing>> thingReplacementCache = new Dictionary<int, Verse.WeakReference<Thing>>();
 
 		public static bool IsNewThingReplacement(this Thing newThing, out Thing oldThing)
 		{
@@ -264,17 +264,26 @@ namespace Replace_Stuff.NewThing
 				return false;
 
 			int thingID = newThing.thingIDNumber;
+			Verse.WeakReference<Thing> weakRef;
 
-			if (thingReplacementCache.TryGetValue(thingID, out oldThing))
+			if (thingReplacementCache.TryGetValue(thingID, out weakRef))
 			{
-				if (oldThing.Destroyed)
-					thingReplacementCache.Remove(thingID);
+				oldThing = weakRef?.Target;
 
-				return oldThing != null && !oldThing.Destroyed;
+				if (oldThing == null)
+					return false;
+
+				if (oldThing.Destroyed)
+				{
+					thingReplacementCache.Remove(thingID);
+					return false;
+				}
+
+				return true;
 			}
 
 			bool result = newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
-			thingReplacementCache[thingID] = result ? oldThing : null;
+			thingReplacementCache[thingID] = result ? new Verse.WeakReference<Thing>(oldThing) : null;
 
 			return result;
 		}
