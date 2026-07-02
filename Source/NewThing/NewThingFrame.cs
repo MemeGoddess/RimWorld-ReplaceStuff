@@ -266,7 +266,12 @@ namespace Replace_Stuff.NewThing
 			int thingID = newThing.thingIDNumber;
 
 			if (thingReplacementCache.TryGetValue(thingID, out oldThing))
+			{
+				if (oldThing.Destroyed)
+					thingReplacementCache.Remove(thingID);
+
 				return oldThing != null && !oldThing.Destroyed;
+			}
 
 			bool result = newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
 			thingReplacementCache[thingID] = result ? oldThing : null;
