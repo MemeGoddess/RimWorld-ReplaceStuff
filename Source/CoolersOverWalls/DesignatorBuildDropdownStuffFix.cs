@@ -4,7 +4,7 @@ using RimWorld;
 
 namespace Replace_Stuff.CoolersOverWalls
 {
-	// Designator_Build and Designator_Dropdown both use the same dropdown UI, so only one can show.
+	// Designator_Build and Designator_Dropdown both use the same dropdown UI, so only one shows.
 	// For stuffable buildings that is normally the material picker, which hid grouping dropdowns.
 	// Material Sub-Menu already solves that, and unpacking every stuffable group broke mods like Basic Dropdowns.
 	// Keep the unpack only for this mod's over-wall cooler/vent groups when material sub-menus are unavailable.
