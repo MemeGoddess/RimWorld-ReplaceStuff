@@ -12,7 +12,7 @@ namespace Replace_Stuff.CoolersOverWalls
 	{
 		public static void SanityCheck()
 		{
-			if (ModLister.GetActiveModWithIdentifier("cedaro.material.submenu", true) != null)
+			if (ModLister.AnyModActiveNoSuffix(["cedaro.material.submenu"]))
 				return;
 
 			foreach (var catDef in DefDatabase<DesignationCategoryDef>.AllDefsListForReading)
