@@ -35,4 +35,8 @@ Check Steam page for any updated info.</description>
 		</li>
 	</modDependencies>
 	<modIconPath IgnoreIfNoMatchingField="True">TDReplaceStuffIcon</modIconPath>
+	<incompatibleWith>
+		<li>solaris.furniturebase</li>
+		<li>gloomy.furniture.continued</li>
+	</incompatibleWith>
 </ModMetaData>
