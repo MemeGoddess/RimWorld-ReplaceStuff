@@ -1,0 +1,18 @@
+<Defs>
+    <Replace_Stuff.InterchangeableItems MayRequire="aoba.fortress.industrial.citadel">
+        <defName>ReplaceStuffCompat_FI_Citadel_Walls</defName>
+        <replaceLists>
+            <li>
+                <category>Wall</category>
+                <items>
+                    <li>FT_Stony_Palisade</li>
+                    <li>FT_Stony_Palisade_Corner</li>
+                    <li>FT_Stony_Palisade_Embrasures</li>
+                    <li>FT_Stony_Palisade_CornerEmbrasures</li>
+                    <li>FTC_CitadelWall</li>
+                    <li>FTC_CitadelWall_Embrasure</li>
+                </items>
+            </li>
+        </replaceLists>
+    </Replace_Stuff.InterchangeableItems>
+</Defs>

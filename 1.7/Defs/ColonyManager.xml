@@ -1,0 +1,15 @@
+<Defs>
+    <Replace_Stuff.InterchangeableItems MayRequire="ilyvion.colonymanagerredux">
+        <defName>ReplaceStuffModCompat_ColonyManager</defName>
+        <replaceLists>
+            <li>
+                <category>ColonyManagers</category>
+                <items>
+                    <li>CM_BasicManagerStation</li>
+                    <li>CM_ManagerStation</li>
+                    <li>CM_AIManager</li>
+                </items>
+            </li>
+        </replaceLists>
+    </Replace_Stuff.InterchangeableItems>
+</Defs>

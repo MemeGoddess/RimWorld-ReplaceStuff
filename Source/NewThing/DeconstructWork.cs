@@ -21,8 +21,7 @@ namespace Replace_Stuff.NewThing
 	[HarmonyPatch(typeof(Blueprint_Build), "WorkTotal", MethodType.Getter)]
 	public static class NewThingDeconstructWork_Blueprint
 	{
-		//public float WorkToBuild
-		public static void Postfix(Frame __instance, ref float __result)
+		public static void Postfix(Blueprint_Build __instance, ref float __result)
 		{
 			if (__instance.IsNewThingReplacement(out Thing oldThing))
 				__result += ReplaceFrame.WorkToDeconstructDef(oldThing.def, oldThing.Stuff);

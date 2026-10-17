@@ -1,0 +1,15 @@
+<Defs>
+	<Replace_Stuff.InterchangeableItems MayRequire="redmattis.dryads">
+		<defName>ReplaceStuffModCompat_DryadsGauranlenRework</defName>
+		<replaceLists>
+			<li>
+				<category>DryadReworked_Shrines</category>
+				<items>
+					<li>Dryad_GauranlenShrine_Large</li>
+					<li>Dryad_GauranlenShrine_Small</li>
+					<li>Dryad_VikingShrine</li>
+				</items>
+			</li>
+		</replaceLists>
+	</Replace_Stuff.InterchangeableItems>
+</Defs>
