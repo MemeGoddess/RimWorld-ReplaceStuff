@@ -15,7 +15,7 @@ namespace Replace_Stuff
 		{
 			// initialize settings
 			settings = GetSettings<Settings>();
-			new Harmony("Uuugggg.rimworld.Replace_Stuff.main").PatchAll();
+			new Harmony("Uuugggg.rimworld.Replace_Stuff.main").PatchAll(Assembly.GetExecutingAssembly());
 		}
 
 		[StaticConstructorOnStartup]
