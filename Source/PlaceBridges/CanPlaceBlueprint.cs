@@ -117,6 +117,8 @@ namespace Replace_Stuff.PlaceBridges
 
 			if (bridgeDef == null)
 				return;
+			if (bridgeDef.blueprintDef == null || !bridgeDef.BuildableByPlayer)
+				return;
 
 			if (!bridgeDef.IsResearchFinished)
 				return;

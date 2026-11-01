@@ -45,6 +45,7 @@ namespace Replace_Stuff.PlaceBridges
 			{
 				//Filter out some terrains
 				if (terdef.IsFloorBase()) continue;//nothing special, so easy pass on these
+				if (terdef.blueprintDef == null || !terdef.BuildableByPlayer) continue;
 
 				TerrainAffordanceDef bridgeAff = terdef.terrainAffordanceNeeded;
 				if (bridgeAff == null) continue;//nothing needed implies it's not buildable
@@ -103,7 +104,7 @@ namespace Replace_Stuff.PlaceBridges
 							}
 							//Log.Message($"Adding {terDef} => {bridgeTerrains.ToStringSafeEnumerable()} for {affDef} => {needDef}");
 							if(ModsConfig.OdysseyActive)
-								bridgeTerrains?.RemoveAll(x => x.Equals(TerrainDefOf.Substructure));
+								bridgeTerrains?.RemoveAll(x => x.IsSubstructure);
 							possibleBridges.AddRange(bridgeTerrains);
 						}
 					}
