@@ -6,6 +6,12 @@ on:
       - "main"
       - "master"
   workflow_dispatch:
+    inputs:
+      release_chore:
+        description: 'Release even if chore'
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   deploy:
@@ -13,3 +19,4 @@ jobs:
     secrets: inherit
     with:
       workshopId: "3526354009"
+      release_chore: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_chore == 'true' }}
