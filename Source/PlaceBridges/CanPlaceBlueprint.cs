@@ -158,14 +158,15 @@ namespace Replace_Stuff.PlaceBridges
 	public static class DontWipeBridgeBlueprints
 	{
 		//public static bool SpawningWipes(BuildableDef newEntDef, BuildableDef oldEntDef)
-		public static bool Prefix(BuildableDef oldEntDef, bool __result)
+		public static void Postfix(BuildableDef oldEntDef, ref bool __result)
 		{
-			if (oldEntDef is ThingDef tdef && (GenConstruct.BuiltDefOf(tdef) ?? oldEntDef).IsBridgelike())
-			{
-				__result = false;
-				return false;
-			}
-			return true;
+			if(!__result)
+				return;
+
+			if (oldEntDef is not ThingDef tdef || !(GenConstruct.BuiltDefOf(tdef) ?? oldEntDef).IsBridgelike())
+				return;
+
+			__result = false;
 		}
 	}
 }
