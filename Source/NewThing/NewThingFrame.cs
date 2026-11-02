@@ -31,6 +31,7 @@ namespace Replace_Stuff.NewThing
 		}
 	}
 	[StaticConstructorOnStartup]
+	[HarmonyPatch]
 	public static class NewThingReplacement
 	{
 		public class Replacement
@@ -71,6 +72,8 @@ namespace Replace_Stuff.NewThing
 
 		public static List<Replacement> replacements;
 		private static Dictionary<(ThingDef, ThingDef), bool> _replacementCache = new ();
+		private static Dictionary<int, Verse.WeakReference<Thing>> _newThingThingReplacementCache = new();
+		private static Dictionary<int, bool> _newThingIsReplacementCache = new();
 
 		public static bool CanReplace(this ThingDef newDef, ThingDef oldDef)
 		{
@@ -254,13 +257,46 @@ namespace Replace_Stuff.NewThing
 			//---------------------------------------------
 		}
 
+		[HarmonyPatch(typeof(Thing), nameof(Thing.Destroy))]
+		[HarmonyPostfix]
+		public static void CacheCleanup(Thing __instance)
+		{
+			var thingId = __instance.thingIDNumber;
+			_newThingIsReplacementCache.Remove(thingId);
+			_newThingThingReplacementCache.Remove(thingId);
+		}
+
 		public static bool IsNewThingReplacement(this Thing newThing, out Thing oldThing)
 		{
-			if (newThing.Spawned)
-				return newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
-
 			oldThing = null;
-			return false;
+			if (!newThing.Spawned)
+				return false;
+			
+			var thingId = newThing.thingIDNumber;
+			if (!_newThingIsReplacementCache.TryGetValue(thingId, out var isReplacement))
+			{
+				isReplacement = newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
+				_newThingIsReplacementCache.Add(thingId, isReplacement);
+				_newThingThingReplacementCache.Add(thingId, new Verse.WeakReference<Thing>(oldThing));
+			}
+
+			if (!isReplacement)
+				return false;
+
+			if (!_newThingThingReplacementCache.TryGetValue(thingId, out var oldThingReference))
+			{
+				Verse.Log.Warning($"Partial miss on Cache for {newThing.ThingID}, this should never happen");
+				newThing.def.IsNewThingReplacement(newThing.Position, newThing.Rotation, newThing.Map, out oldThing);
+				_newThingThingReplacementCache.Add(thingId, new Verse.WeakReference<Thing>(oldThing));
+			}
+			oldThing = oldThingReference?.Target;
+			if (oldThing == null || oldThing.Destroyed)
+			{
+				_newThingIsReplacementCache.Remove(thingId);
+				_newThingThingReplacementCache.Remove(thingId);
+			}
+
+			return true;
 		}
 
 		public static bool IsNewThingReplacement(this ThingDef newDef, IntVec3 pos, Rot4 rotation, Map map, out Thing oldThing)

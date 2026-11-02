@@ -23,6 +23,9 @@ namespace Replace_Stuff
 		public Thing oldThing;
 		public ThingDef oldStuff;
 		
+		private float? _workToDeconstruct;
+		private float? _workToReplace;
+		private float? _workToBuild;
 		public override void ExposeData()
 		{
 			base.ExposeData();
@@ -42,22 +45,27 @@ namespace Replace_Stuff
 		{
 			get
 			{
-				return WorkToDeconstructDef(def.entityDefToBuild as ThingDef, oldStuff);
+				_workToDeconstruct ??= WorkToDeconstructDef(def.entityDefToBuild as ThingDef, oldStuff);
+				return _workToDeconstruct.Value;
 			}
 		}
+
 
 		public float WorkToReplace
 		{
 			get
 			{
-				return def.entityDefToBuild.GetStatValueAbstract(StatDefOf.WorkToBuild, Stuff);
+				_workToReplace ??= def.entityDefToBuild.GetStatValueAbstract(StatDefOf.WorkToBuild, Stuff);
+				return _workToReplace.Value;
 			}
 		}
+
 		public new float WorkToBuild
 		{
 			get
 			{
-				return WorkToDeconstructDef(def, oldStuff) + WorkToReplace;
+				_workToBuild ??= WorkToDeconstructDef(def, oldStuff) + WorkToReplace;
+				return _workToBuild.Value;
 			}
 		}
 
