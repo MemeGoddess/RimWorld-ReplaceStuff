@@ -311,6 +311,9 @@ namespace Replace_Stuff.NewThing
 			{
 				foreach (Thing oThing in checkPos.GetThingList(map))
 				{
+					// Frames share their building's replaceTags, so a frame could match itself instead of the old thing
+					if (oThing.def.IsFrame || oThing.def.IsBlueprint) continue;
+
 					if (newDef.CanReplace(oThing.def))
 					{
 						oldThing = oThing;
