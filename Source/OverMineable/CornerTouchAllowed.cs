@@ -76,39 +76,42 @@ namespace Replace_Stuff.OverMineable
 		//private void TrySpawnYield(Map map, float yieldChance, bool moteOnWaste, Pawn pawn)
 		public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
 		{
-			//There's two overloads for TryPlaceThing, one just literally calls the other and tosses out the (out Thing)..
-			//I don't want to write out all the generic params here...
-			//so just find the one with less parameters.
 			MethodInfo TryPlaceThingInfo = typeof(GenPlace).GetMethods(AccessTools.all)
 				.Where(mi => mi.Name == "TryPlaceThing")
 				.MinBy(mi => mi.GetParameters().Length);
+			MethodInfo TryPlaceThingInSameRoomValidator = AccessTools.Method(typeof(DropOnPawn), nameof(DropOnPawn.TryPlaceThingInSameRoomValidator));
+			
+			var matcher = new CodeMatcher(instructions);
+			matcher.End();
+			matcher.MatchEndBackwards([
+					new CodeMatch(OpCodes.Ldftn),
+					new CodeMatch(OpCodes.Newobj),
+					new CodeMatch(OpCodes.Ldnull)
+				])
+				.ThrowIfInvalid("Unable to find validator signature");
 
-			//Same thing put takes a pawn to validate room.
-			MethodInfo TryPlaceThingInSameRoomInfo = AccessTools.Method(typeof(DropOnPawn), nameof(TryPlaceThingInSameRoom));
+			matcher.RemoveInstruction();
+			matcher.Insert([
+				new CodeInstruction(OpCodes.Ldarg_S, 3), // Pawn
+				new CodeInstruction(OpCodes.Call, TryPlaceThingInSameRoomValidator)
+			])
+			.ThrowIfInvalid("Invalid after replacing null validator");
 
-			foreach(var inst in instructions)
-			{
-				if(inst.Calls(TryPlaceThingInfo))
-				{
-					yield return new CodeInstruction(OpCodes.Ldarg_S, 3);//Pawn pawn
-					yield return new CodeInstruction(OpCodes.Call, TryPlaceThingInSameRoomInfo);
-				}
-				else yield return inst;
-			}
+			return matcher.Instructions();
 		}
 
 		//public static bool TryPlaceThing(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> extraValidator = null, Rot4? rot = null, int squareRadius = 1)
-		public static bool TryPlaceThingInSameRoom(Thing thing, IntVec3 center, Map map, ThingPlaceMode mode, Action<Thing, int> placedAction = null, Predicate<IntVec3> extraValidator = null, Rot4? rot = null, int squareRadius = 1, Pawn miner = null)
+		public static Predicate<IntVec3> TryPlaceThingInSameRoomValidator(Pawn miner = null)
 		{
 			//For godmode mining there is no pawn
 			if (miner != null)
 			{
-				Predicate<IntVec3> newValidator = (IntVec3 pos) => pos.GetRoom(miner.Map) == miner.GetRoom();
+				return (IntVec3 pos) => pos.GetRoom(miner.Map) == miner.GetRoom();
 				//(Good luck setting this up in ILCode so I'll do it here)
-				extraValidator = extraValidator == null ? newValidator : pos => extraValidator(pos) && newValidator(pos);
+				// Done ^.^
 			}
 
-			return GenPlace.TryPlaceThing(thing, center, map, mode, placedAction, extraValidator, rot);
+			return null;
 		}
 	}
 }
