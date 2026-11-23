@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using JetBrains.Annotations;
 using RimWorld;
 using System.Diagnostics;
 using System.Threading;
@@ -75,6 +76,10 @@ namespace Replace_Stuff.PlaceBridges
 			if (affordances.Contains(neededDef))
 				return true;
 
+			TerrainDef tDef = map.terrainGrid.TerrainAt(pos);
+			if (def is TerrainDef placingTerrain && placingTerrain.IsBridgelike() && tDef.IsBridgelike())
+				return true;
+
 			if (def is TerrainDef)
 				return false;
 
@@ -87,11 +92,57 @@ namespace Replace_Stuff.PlaceBridges
 				return true;
 
 			//Player not choosing to build and bridges possible: ok (elsewhere in code will place blueprints)
-			TerrainDef tDef = map.terrainGrid.TerrainAt(pos);
 			if (DesignatorContext.designating && BridgelikeTerrain.FindBridgeFor(tDef, neededDef, map) != null)
 				return true;
 
 			return false;
+		}
+	}
+
+	[HarmonyPatch(typeof(GenConstruct), nameof(GenConstruct.CanPlaceBlueprintOver))]
+	static class CanPlaceBridgeBlueprintOverBridgeBlueprint
+	{
+		public static void Postfix(BuildableDef newDef, ThingDef oldDef, ref bool __result)
+		{
+			if (__result || newDef is not TerrainDef newTerrain || !newTerrain.IsBridgelike())
+				return;
+
+			if ((oldDef.IsBlueprint || oldDef.IsFrame) && GenConstruct.BuiltDefOf(oldDef).IsBridgelike())
+				__result = true;
+		}
+	}
+
+	[HarmonyPatch(typeof(GenConstruct), nameof(GenConstruct.CanPlaceBlueprintAt_NewTemp))]
+	static class CanPlaceBridgeOverBridgeFoundation
+	{
+		[CanBeNull] private static string _foundationAlreadyExists;
+		public static void Postfix(BuildableDef entDef, IntVec3 center, Rot4 rot, Map map, ThingDef stuffDef, ref AcceptanceReport __result)
+		{
+			_foundationAlreadyExists ??= "FoundationAlreadyExists".Translate();
+			if (__result.Accepted || __result.Reason != _foundationAlreadyExists ||
+				entDef is not TerrainDef newBridge || !newBridge.IsBridgelike() ||
+				map.terrainGrid.FoundationAt(center) is not { } oldBridge || !oldBridge.IsBridgelike() ||
+				!GenConstruct.CanBuildOnTerrain(entDef, center, map, rot, null, stuffDef))
+				return;
+
+			foreach (Thing thing in center.GetThingList(map))
+			{
+				if(thing.def.category != ThingCategory.Building)
+					continue;
+				
+				BuildableDef thingBuildDef = GenConstruct.BuiltDefOf(thing.def);
+				TerrainAffordanceDef neededAffordance = thingBuildDef.GetTerrainAffordanceNeed(thing.Stuff);
+				if ((neededAffordance != null && !newBridge.affordances.Contains(neededAffordance)) ||
+					!GenConstruct.CanPlaceBlueprintOver(entDef, thing.def, stuffDef, thing.Stuff))
+					return;
+			}
+
+			if (entDef.PlaceWorkers != null)
+				foreach (PlaceWorker placeWorker in entDef.PlaceWorkers)
+					if (!placeWorker.AllowsPlacing(entDef, center, rot, map).Accepted)
+						return;
+
+			__result = AcceptanceReport.WasAccepted;
 		}
 	}
 
@@ -158,15 +209,13 @@ namespace Replace_Stuff.PlaceBridges
 	public static class DontWipeBridgeBlueprints
 	{
 		//public static bool SpawningWipes(BuildableDef newEntDef, BuildableDef oldEntDef)
-		public static void Postfix(BuildableDef oldEntDef, ref bool __result)
+		public static void Postfix(BuildableDef newEntDef, BuildableDef oldEntDef, ref bool __result)
 		{
-			if(!__result)
-				return;
-
 			if (oldEntDef is not ThingDef tdef || !(GenConstruct.BuiltDefOf(tdef) ?? oldEntDef).IsBridgelike())
 				return;
 
-			__result = false;
+			// Keep bridges in place under other blueprints, but allow a new bridge to replace one.
+			__result = newEntDef.IsBridgelike();
 		}
 	}
 }
