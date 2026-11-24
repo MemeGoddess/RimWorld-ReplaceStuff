@@ -37,7 +37,7 @@ public class BridgeReplacementTest
 	public void AnyBridgeCanReplaceAnyOtherBridge()
 	{
 		var bridges = BridgelikeTerrain.allBridgeTerrains
-			.Where(bridge => bridge.blueprintDef != null && bridge.GetStatValueAbstract(StatDefOf.WorkToBuild) > 0f)
+			.Where(bridge => bridge.bridge && bridge.blueprintDef != null && bridge.GetStatValueAbstract(StatDefOf.WorkToBuild) > 0f)
 			.Distinct()
 			.ToList();
 		Expect.IsTrue(bridges.Count > 1, "At least two buildable bridge terrain defs are required for this test");
@@ -73,6 +73,14 @@ public class BridgeReplacementTest
 		GenSpawn.Spawn(wall, cell, map);
 		var report = GenConstruct.CanPlaceBlueprintAt(TerrainDefOf.Bridge, cell, Rot4.North, map, godMode: true);
 		Expect.IsFalse(report.Accepted, "Should not be able to replace bridge when higher affordance is required");
+	}
+
+	[Test]
+	public void CannotReplaceBridgeWithSameBridge()
+	{
+		SetTerrainForTest(TerrainDefOf.HeavyBridge);
+		var report = GenConstruct.CanPlaceBlueprintAt(TerrainDefOf.HeavyBridge, cell, Rot4.North, map, true);
+		Expect.IsFalse(report.Accepted, "Should not be able to replace bridge with same bridge");
 	}
 
 	private void SetTerrainForTest(TerrainDef terrain)

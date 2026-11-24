@@ -121,7 +121,7 @@ namespace Replace_Stuff.PlaceBridges
 			_foundationAlreadyExists ??= "FoundationAlreadyExists".Translate();
 			if (__result.Accepted || __result.Reason != _foundationAlreadyExists ||
 				entDef is not TerrainDef newBridge || !newBridge.IsBridgelike() ||
-				map.terrainGrid.FoundationAt(center) is not { } oldBridge || !oldBridge.IsBridgelike() ||
+				map.terrainGrid.FoundationAt(center) is not { } oldBridge || !oldBridge.IsBridgelike() || oldBridge == entDef ||
 				!GenConstruct.CanBuildOnTerrain(entDef, center, map, rot, null, stuffDef))
 				return;
 
@@ -211,7 +211,7 @@ namespace Replace_Stuff.PlaceBridges
 		//public static bool SpawningWipes(BuildableDef newEntDef, BuildableDef oldEntDef)
 		public static void Postfix(BuildableDef newEntDef, BuildableDef oldEntDef, ref bool __result)
 		{
-			if (oldEntDef is not ThingDef tdef || !(GenConstruct.BuiltDefOf(tdef) ?? oldEntDef).IsBridgelike())
+			if (oldEntDef is not ThingDef tdef || newEntDef is not ThingDef || !(GenConstruct.BuiltDefOf(tdef) ?? oldEntDef).IsBridgelike())
 				return;
 
 			// Keep bridges in place under other blueprints, but allow a new bridge to replace one.
